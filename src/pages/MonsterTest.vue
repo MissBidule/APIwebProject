@@ -21,9 +21,10 @@
   
   <script>
   import ArmorCard from '@/components/ArmorSample.vue'
-  import ArmorsOptions from '@/components/ArmorsOption.vue'
+  import ArmorsOptions from '@/components/SortOptions.vue'
 
-  import { getAllArmorsData } from '@/services/api/ArmorsRepository.js'
+  import { getArmorById, getCharmsById, getDecorationsById, getSkillsById, getAilmentsById } from '@/services/api/GetElementById.js'
+  import { getAllArmorsData } from '@/services/api/AllElementsRepository.js'
   
   export default {
     name: 'MonstersGallery',
@@ -38,9 +39,7 @@
         else if (this.armorsSortType === "ID") 
           {field = "id";}
         const reversed = ["ZAName","ZAType"].includes(this.armorsSortType);
-        console.log(reversed);
         const filterFunc = (a) => a.name.toLowerCase().includes(this.search.toLowerCase());
-        console.log(this.armorsData[0].name.toLowerCase().includes(this.search.toLowerCase()))
         const comparator = (a, b) => (field !== "id" ? a[field].localeCompare(b[field]) : a[field] - b[field]);
         data = data.filter(filterFunc);
         data = data.sort(comparator);
@@ -64,7 +63,12 @@
     },
     methods: {
       async retrieveArmorsData() {
-        this.armorsData = await getAllArmorsData(1)
+        this.armorsData = await getAllArmorsData();
+        getArmorById(1);
+        getCharmsById(300);
+        getDecorationsById(1);
+        getSkillsById(1);
+        getAilmentsById(1);
       }
     }
   }
