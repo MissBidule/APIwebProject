@@ -1,20 +1,18 @@
 <template>
     <HeaderCard
         :class="active"
+        :search="activeSearch"
     />
     <div class="SearchResult">
         <h1>Search Results :</h1>
         <img class="barre" src="@/assets/barre.png"/>
         <div class="results">
-            <span v-for="(n,index) in resultsNB" :key="n">
-                <ResultSample
-                :name="elementsFound[index].name"
-                :arrayType="elementsFound[index].arrayType"
-                :id="elementsFound[index].id"
-                :url="elementsFound[index].url"
-                />
-            </span>
-            
+            <ResultSample v-for="(n,index) in resultsNB" :key="n"
+            :name="elementsFound[index].name"
+            :arrayType="elementsFound[index].arrayType"
+            :id="elementsFound[index].id"
+            :url="elementsFound[index].url"
+            />
             <div v-if="!elementsFound[0]">{{state}}
             </div>
         </div>
@@ -27,8 +25,8 @@
     
 <script>
     import { useRoute } from 'vue-router'
-    import HeaderCard from '@/components/Header.vue'
-    import FooterCard from '@/components/Footer.vue'
+    import HeaderCard from '@/components/BasicSample/Header.vue'
+    import FooterCard from '@/components/BasicSample/Footer.vue'
     import ResultSample from '@/components/ResultSample.vue'
     import { getAllElementsByName } from '@/services/api/GetElementByName.js'
     
@@ -42,6 +40,7 @@
       data() {
         return {
             active: "",
+            activeSearch: "",
             resultsNBasked: 25,
             elementsFound: [],
             state: "Loading..."
@@ -54,6 +53,7 @@
     },
       beforeMount() {
         const route = useRoute();
+        this.activeSearch = route.params.name;
         this.SearchAllFields(route.params.name);
       },
       beforeRouteUpdate(to, from) {
@@ -62,6 +62,7 @@
             this.resultsNBasked = 25;
             this.elementsFound = [];
             this.state = "Loading...";
+            this.activeSearch = to.params.name;
             this.SearchAllFields(to.params.name);
         }
       },

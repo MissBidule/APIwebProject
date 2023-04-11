@@ -2,35 +2,41 @@
     <HeaderCard
       :class="active"
     />
-      <div class="Sets-gallery">
+      <div class="Monsters-gallery">
         <div class="path">
-          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'setsGallery'}">Set pieces</router-link>
+          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'lifeIndex'}">Life</router-link> >> <router-link :to="{ name: 'monstersGallery'}">Monster</router-link>
+        </div>
+        <div class="type-list">
+            <ul>
+                <li>
+                    <router-link :to="{ name: 'monstersTypeGallery', params: { type: 'small'}}">Small</router-link>
+                </li>
+                <li>
+                    <router-link :to="{ name: 'monstersTypeGallery', params: { type: 'large'}}">Large</router-link>
+                </li>
+            </ul>
         </div>
         <SortOptions 
           v-model:search="search" 
           v-model:typeSort="typeSort" 
           v-model:orderSort="orderSort"
         />
-        <span v-if="setsData[0]">
-            <div class="gallery">
-                <div class="item" v-for="(n,index) in resultsNB" :key="n">
-                    <AllSetSample 
-                    :key="setsOrganizedData[index].id"
-                    :name="setsOrganizedData[index].name"
-                    :id="setsOrganizedData[index].id"
-                    :img="(ListURL[setsOrganizedData[index].id-1] != '' ? ListURL[setsOrganizedData[index].id-1]:ListURL[-1])"
-                    />
-                </div>
-            </div>
-            <div v-if="setsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
+        <div v-if="monstersData[0]" class="gallery">
+          <AllMonsterSample v-for="(n,index) in resultsNB" :key="n"
+            :name="monstersOrganizedData[index].name"
+            :id="monstersOrganizedData[index].id"
+            :img="(ListURL1[monstersOrganizedData[index].id-1] != '' ? ListURL1[monstersOrganizedData[index].id-1]:ListURL1[-1])"
+            :icon="(ListURL2[monstersOrganizedData[index].id-1] != '' ? ListURL2[monstersOrganizedData[index].id-1]:ListURL2[-1])"
+          />
+          <div v-if="monstersOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
               <p>Load more...</p>
-            </div>
-            <div v-if="!setsOrganizedData[0]">
-                Nothing found for {{search}}
-            </div>
-        </span>
+          </div>
+          <div v-if="!monstersOrganizedData[0]">
+            Nothing found for {{search}}
+          </div>
+        </div>
         <div v-else class="wait-for-gallery">
-            <LoadingCard/>
+                  <LoadingCard/>
         </div>
       </div>
     <FooterCard/>
@@ -40,19 +46,19 @@
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
     import LoadingCard from '@/components/BasicSample/Loading.vue'
-    import AllSetSample from '@/components/AllSample/AllSetSample.vue'
+    import AllMonsterSample from '@/components/AllSample/AllMonsterSample.vue'
     import SortOptions from '@/components/BasicSample/SortOptions.vue'
-    import { setURL } from'@/services/tools.js'
-    import { getAllArmorSetsData } from '@/services/api/AllElementsRepository.js'
+    import { monsterIconURL, monsterImgURL } from '@/services/tools'
+    import { getAllMonstersData } from '@/services/api/AllElementsRepository.js'
     
     export default {
-      name: 'SetsGallery',
+      name: 'MonstersGallery',
       computed: {
         resultsNB: function() {
-          return (this.resultsNBasked > this.setsOrganizedData.length ? this.setsOrganizedData.length : this.resultsNBasked);
+          return (this.resultsNBasked > this.monstersOrganizedData.length ? this.monstersOrganizedData.length : this.resultsNBasked);
         },
-        setsOrganizedData: function() {
-            let data = this.setsData;
+        monstersOrganizedData: function() {
+            let data = this.monstersData;
             let field;
             if (this.typeSort == "Name")
               {field = "name";}
@@ -72,26 +78,27 @@
           HeaderCard,
           FooterCard,
           LoadingCard,
-          AllSetSample,
+          AllMonsterSample,
           SortOptions
       },
       data() {
         return {
-          active: "object",
-          setsData: [],
+          active: "life",
+          monstersData: [],
           search: localStorage.getItem("search") || "",
           typeSort: localStorage.getItem("typeSort") || "ID",
           orderSort: localStorage.getItem("orderSort") || "A-Z",
           resultsNBasked: 12,
-          ListURL: setURL
+          ListURL1 : monsterImgURL,
+          ListURL2 : monsterIconURL
         }
       },
       beforeMount() {
-        this.retrieveSetsData()
+        this.retrieveMonstersData()
       },
       methods: {
-        async retrieveSetsData() {
-          this.setsData = await getAllArmorSetsData()
+        async retrieveMonstersData() {
+          this.monstersData = await getAllMonstersData()
         },
         LoadMore() {
           this.resultsNBasked += 12;
@@ -104,27 +111,27 @@
   </script>
   
   <style>
-    .object #object {
-        background-color: #896954;
+    .life #life {
+      background-color: #896954;
     }
   
-    .object #object a {
-        background-color: #ddc89e;
+    .life #life a {
+      background-color: #ddc89e;
     }
   
-    .object #object a:hover {
-        background-color: #f5e5be;
+    .life #life a:hover {
+      background-color: #f5e5be;
     }
   </style>
     
   <style scoped>
-    .path, .navigation {
-        margin-left: 2vw;
-        margin-bottom: 1vh;
+    .path, .gallery {
+      margin-left: 2vw;
+      margin-bottom: 1vh;
     }
   
     a {
-        text-decoration: none;
+      text-decoration: none;
     }
   
     .type-list ul {
@@ -139,7 +146,7 @@
       background-position: 0px 50%;
       background-size: 50%;
       background-repeat: no-repeat;
-      padding-left: 4%;
+      padding-left: 2em;
       padding-top: 2%;
       padding-bottom: 2%;
       margin-right: 2%;
@@ -152,27 +159,24 @@
       width: 20vw;
       padding-left: 0.5em;
     }
-
+  
     .navigation p:hover {
-        background-color: #ddc89e;
+      background-color: #ddc89e;
     }
 
     .gallery {
         display: flex;
         justify-content: space-evenly;
         flex-wrap: wrap;
-    }
-
-    .item {
-        width: 15em;
+        align-items: flex-end;
     }
   
     @media screen and (max-width: 650px) {
-        .type-list ul li{
-            padding-left: 8%;
-        }
+      .type-list ul li{
+        padding-left: 8%;
+      }
 
-        .item {
+      .item {
             width: 10em;
         }
     }

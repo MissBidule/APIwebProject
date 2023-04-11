@@ -8,31 +8,31 @@
         </div>
         <div class="container">
             <router-link :to="{ name: 'armorsGallery'}" class="item">
-                <img alt="Armor-pieces-picture" src="@/assets/armorpiece.jpg"/>
+                <img alt="Armor-pieces-picture" rel="preload" src="@/assets/armorpiece.jpg"/>
                 <h2>Armor pieces</h2>
             </router-link>
             <router-link :to="{ name: 'setsGallery'}" class="item">
-                <img alt="Armor-set-picture" src="@/assets/armorset.jpg"/>
+                <img alt="Armor-set-picture" rel="preload" src="@/assets/armorset.jpg"/>
                 <h2>Armor set</h2>
             </router-link>
             <router-link :to="{ name: 'charmsGallery'}" class="item">
-                <img alt="Charm-picture" src="@/assets/charm.jpg"/>
+                <img alt="Charm-picture" rel="preload" src="@/assets/charm.jpg"/>
                 <h2>Charms</h2>
             </router-link>
             <router-link :to="{ name: 'decorationsGallery'}" class="item">
-                <img alt="Decoration-picture" src="@/assets/decoration.jpg"/>
+                <img alt="Decoration-picture" rel="preload" src="@/assets/decoration.jpg"/>
                 <h2>Decorations</h2>
             </router-link>
             <router-link :to="{ name: 'itemsGallery'}" class="item">
-                <img alt="Item-picture" src="@/assets/item.jpg"/>
+                <img alt="Item-picture" rel="preload" src="@/assets/item.jpg"/>
                 <h2>Items</h2>
             </router-link>
             <router-link :to="{ name: 'skillsGallery'}" class="item">
-                <img alt="Skill-picture" src="@/assets/skills.jpg"/>
+                <img alt="Skill-picture" rel="preload" src="@/assets/skills.jpg"/>
                 <h2>Skills</h2>
             </router-link>
             <router-link :to="{ name: 'weaponsGallery'}" class="item">
-                <img alt="Weapon-picture" src="@/assets/weapon.jpg"/>
+                <img alt="Weapon-picture" rel="preload" src="@/assets/weapon.jpg"/>
                 <h2>Weapons</h2>
             </router-link>
         </div>
@@ -41,8 +41,8 @@
 </template>
     
 <script>
-    import HeaderCard from '@/components/Header.vue'
-    import FooterCard from '@/components/Footer.vue'
+    import HeaderCard from '@/components/BasicSample/Header.vue'
+    import FooterCard from '@/components/BasicSample/Footer.vue'
     
     export default {
       name: 'ObjectIndex',

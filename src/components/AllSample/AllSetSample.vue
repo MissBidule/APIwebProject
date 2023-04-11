@@ -14,7 +14,7 @@
       name: 'AllSetSample',
       props: {
         name: {type: String,  required: true,default:"name not found"},
-        img: {type: String, default:image},
+        img: {type: String, required: true, default:image},
         id: {type: Number, required: true, default: 0}
       }
     }
@@ -22,11 +22,15 @@
   
 <style scoped>
   .set-item img {
-    width: 8em;
+    width: 10em;
   }
 
   .set-item, .set-item a {
     text-align: center;
     text-decoration: none;
+  }
+
+  .set-item p {
+    margin: 0;
   }
 </style>

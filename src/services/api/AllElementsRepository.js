@@ -1,3 +1,5 @@
+import { weaponName, weaponType } from "../tools";
+
 async function getAllArmorsData() {
     var myHeaders = new Headers({
         "Content-Type": "application/json"
@@ -109,6 +111,13 @@ async function getAllWeaponsData() {
     .then((array) => {
         return array
     });
+
+    myAnswer.forEach(element => {
+        var index = weaponType.findIndex((item) => item == element.type);
+        element.typeName = weaponName[index];
+    });
+
+    console.log(myAnswer);
 
     return myAnswer;
 }

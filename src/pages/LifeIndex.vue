@@ -8,15 +8,15 @@
         </div>
         <div class="container">
             <router-link :to="{ name: 'ailmentsGallery'}" class="item">
-                <img alt="Ailment-picture" src="@/assets/ailment.jpg"/>
+                <img alt="Ailment-picture" rel="preload" src="@/assets/ailment.jpg"/>
                 <h2>Ailment</h2>
             </router-link>
             <router-link :to="{ name: 'monstersGallery'}" class="item">
-                <img alt="Monster-picture" src="@/assets/monster.jpg"/>
+                <img alt="Monster-picture" rel="preload" src="@/assets/monster.jpg"/>
                 <h2>Monster</h2>
             </router-link>
             <router-link :to="{ name: 'locationsGallery'}" class="item">
-                <img alt="Location-picture" src="@/assets/location.jpg"/>
+                <img alt="Location-picture" rel="preload" src="@/assets/location.jpg"/>
                 <h2>Location</h2>
             </router-link>
         </div>
@@ -25,8 +25,8 @@
 </template>
     
 <script>
-    import HeaderCard from '@/components/Header.vue'
-    import FooterCard from '@/components/Footer.vue'
+    import HeaderCard from '@/components/BasicSample/Header.vue'
+    import FooterCard from '@/components/BasicSample/Footer.vue'
     
     export default {
       name: 'LifeIndex',

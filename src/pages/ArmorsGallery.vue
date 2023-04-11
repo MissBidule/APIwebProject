@@ -8,11 +8,9 @@
       </div>
       <div class="type-list">
         <ul>
-          <li><router-link :to="{ name: 'armorsTypeGallery', params: { type: 'head'}}">Head</router-link></li>
-          <li><router-link :to="{ name: 'armorsTypeGallery', params: { type: 'chest'}}">Chest</router-link></li>
-          <li><router-link :to="{ name: 'armorsTypeGallery', params: { type: 'gloves'}}">Gloves</router-link></li>
-          <li><router-link :to="{ name: 'armorsTypeGallery', params: { type: 'waist'}}">Waist</router-link></li>
-          <li><router-link :to="{ name: 'armorsTypeGallery', params: { type: 'legs'}}">Legs</router-link></li>
+          <li v-for="(n,index) in listType.length" :key="n">
+            <router-link :to="{ name: 'armorsTypeGallery', params: { type: listType[index]}}">{{capitalizeFirstLetterMethod(listType[index])}}</router-link>
+          </li>
         </ul>
       </div>
       <SortOptions 
@@ -21,14 +19,11 @@
         v-model:orderSort="orderSort"
       />
       <div v-if="armorsData[0]" class="gallery">
-        <span v-for="(n,index) in resultsNB" :key="n">
-          <AllArmorSample 
-            :key="armorsOrganizedData[index].id"
-            :name="armorsOrganizedData[index].name"
-            :type="armorsOrganizedData[index].type"
-            :id="armorsOrganizedData[index].id"
-          />
-        </span>
+        <AllArmorSample v-for="(n,index) in resultsNB" :key="n"
+          :name="armorsOrganizedData[index].name"
+          :type="capitalizeFirstLetterMethod(armorsOrganizedData[index].type)"
+          :id="armorsOrganizedData[index].id"
+        />
         <div v-if="armorsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
             <p>Load more...</p>
         </div>
@@ -37,18 +32,19 @@
         </div>
       </div>
       <div v-else class="wait-for-gallery">
-				<img rel="preload" class="picture" src="@/assets/loading.gif"/>
-        <h2>Loading...</h2>
+				<LoadingCard/>
       </div>
     </div>
   <FooterCard/>
 </template>
   
 <script>
-  import HeaderCard from '@/components/Header.vue'
-  import FooterCard from '@/components/Footer.vue'
-  import AllArmorSample from '@/components/AllArmorSample.vue'
-  import SortOptions from '@/components/SortOptions.vue'
+  import HeaderCard from '@/components/BasicSample/Header.vue'
+  import FooterCard from '@/components/BasicSample/Footer.vue'
+  import LoadingCard from '@/components/BasicSample/Loading.vue'
+  import AllArmorSample from '@/components/AllSample/AllArmorSample.vue'
+  import SortOptions from '@/components/BasicSample/SortOptions.vue'
+  import { armorType, capitalizeFirstLetter } from '@/services/tools'
 
   import { getAllArmorsData } from '@/services/api/AllElementsRepository.js'
   
@@ -78,6 +74,7 @@
     components: {
         HeaderCard,
         FooterCard,
+        LoadingCard,
         AllArmorSample,
         SortOptions
     },
@@ -88,7 +85,8 @@
         search: localStorage.getItem("search") || "",
         typeSort: localStorage.getItem("typeSort") || "ID",
         orderSort: localStorage.getItem("orderSort") || "A-Z",
-        resultsNBasked: 25
+        resultsNBasked: 25,
+        listType: armorType
       }
     },
     beforeMount() {
@@ -103,6 +101,9 @@
       },
       initResultsNB() {
         this.resultsNBasked = 25;
+      },
+      capitalizeFirstLetterMethod(string) {
+        return capitalizeFirstLetter(string)
       }
     }
   }
@@ -110,49 +111,26 @@
 
 <style>
   .object #object {
-      background-color: #896954;
+    background-color: #896954;
   }
 
   .object #object a {
-      background-color: #ddc89e;
+    background-color: #ddc89e;
   }
 
   .object #object a:hover {
-      background-color: #f5e5be;
+    background-color: #f5e5be;
   }
 </style>
   
 <style scoped>
-  .wait-for-gallery {
-    width: 100%;
-    position: relative;
-  }
-
-  img.picture {
-    position: absolute;
-    padding: auto;
-    width: 50vw;
-    height: auto;
-    left: 50%;
-    transform: translate(-50%, 0); 
-  }
-
-  .wait-for-gallery h2 {
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0); 
-    color: #f5e5be;
-    text-shadow: 2px 0 #694B44, -2px 0 #694B44, 0 2px #694B44, 0 -2px #694B44,
-            1px 1px #694B44, -1px -1px #694B44, 1px -1px #694B44, -1px 1px #694B44;
-  }
-
   .path, .gallery {
-      margin-left: 2vw;
-      margin-bottom: 1vh;
+    margin-left: 2vw;
+    margin-bottom: 1vh;
   }
 
   a {
-      text-decoration: none;
+    text-decoration: none;
   }
 
   .type-list ul {

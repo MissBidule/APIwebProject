@@ -22,7 +22,7 @@
                     <router-link :to="{ name: 'locationsGallery'}">Location</router-link>
                 </div>
             </li>
-            <input type="text" @keyup.enter="submit" placeholder="Search...">
+            <input type="text" @keyup.enter="submit" :value="search" placeholder="Search...">
         </ul>        
     </div>
 </template>
@@ -34,6 +34,9 @@ export default {
         submit(event) {
             this.$router.push({ name: 'searchPage', params: { name: event.target.value}});
         }
+    },
+    props: {
+      search: String
     }
 }
 </script>

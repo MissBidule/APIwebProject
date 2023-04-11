@@ -4,7 +4,7 @@
     />
       <div class="Ailments-gallery">
         <div class="path">
-          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'ailmentsGallery'}">Ailments</router-link>
+          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'lifeIndex'}">Life</router-link> >> <router-link :to="{ name: 'ailmentsGallery'}">Ailments</router-link>
         </div>
         <SortOptions 
           v-model:search="search" 
@@ -12,14 +12,11 @@
           v-model:orderSort="orderSort"
         />
         <div v-if="ailmentsData[0]" class="gallery">
-            <span v-for="(n,index) in resultsNB" :key="n">
-                <AllAilmentSample 
-                    :key="ailmentsOrganizedData[index].id"
-                    :name="ailmentsOrganizedData[index].name"
-                    :type="ailmentsOrganizedData[index].type"
-                    :id="ailmentsOrganizedData[index].id"
-                />
-            </span>
+            <AllAilmentSample v-for="(n,index) in resultsNB" :key="n"
+                :name="ailmentsOrganizedData[index].name"
+                :type="ailmentsOrganizedData[index].type"
+                :id="ailmentsOrganizedData[index].id"
+            />
             <div v-if="ailmentsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
                 <p>Load more...</p>
             </div>
@@ -28,18 +25,18 @@
           </div>
         </div>
         <div v-else class="wait-for-gallery">
-                  <img rel="preload" class="picture" src="@/assets/loading.gif"/>
-          <h2>Loading...</h2>
+            <LoadingCard/>
         </div>
       </div>
     <FooterCard/>
-  </template>
+</template>
     
   <script>
-    import HeaderCard from '@/components/Header.vue'
-    import FooterCard from '@/components/Footer.vue'
-    import AllAilmentSample from '@/components/AllAilmentSample.vue'
-    import SortOptions from '@/components/SortOptions.vue'
+    import HeaderCard from '@/components/BasicSample/Header.vue'
+    import FooterCard from '@/components/BasicSample/Footer.vue'
+    import LoadingCard from '@/components/BasicSample/Loading.vue'
+    import AllAilmentSample from '@/components/AllSample/AllAilmentSample.vue'
+    import SortOptions from '@/components/BasicSample/SortOptions.vue'
   
     import { getAllAilmentsData } from '@/services/api/AllElementsRepository.js'
     
@@ -69,12 +66,13 @@
       components: {
           HeaderCard,
           FooterCard,
+          LoadingCard,
           AllAilmentSample,
           SortOptions
       },
       data() {
         return {
-            active: "object",
+            active: "life",
             ailmentsData: [],
             search: localStorage.getItem("search") || "",
             typeSort: localStorage.getItem("typeSort") || "ID",
@@ -99,44 +97,21 @@
     }
   </script>
   
-  <style>
-    .object #object {
+<style>
+    .life #life {
         background-color: #896954;
     }
-  
-    .object #object a {
+
+    .life #life a {
         background-color: #ddc89e;
     }
-  
-    .object #object a:hover {
+
+    .life #life a:hover {
         background-color: #f5e5be;
     }
-  </style>
+</style>
     
-  <style scoped>
-    .wait-for-gallery {
-      width: 100%;
-      position: relative;
-    }
-  
-    img.picture {
-      position: absolute;
-      padding: auto;
-      width: 50vw;
-      height: auto;
-      left: 50%;
-      transform: translate(-50%, 0); 
-    }
-  
-    .wait-for-gallery h2 {
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, 0); 
-      color: #f5e5be;
-      text-shadow: 2px 0 #694B44, -2px 0 #694B44, 0 2px #694B44, 0 -2px #694B44,
-              1px 1px #694B44, -1px -1px #694B44, 1px -1px #694B44, -1px 1px #694B44;
-    }
-  
+  <style scoped>   
     .path, .gallery {
         margin-left: 2vw;
         margin-bottom: 1vh;

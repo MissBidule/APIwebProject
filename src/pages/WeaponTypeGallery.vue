@@ -2,30 +2,31 @@
     <HeaderCard
       :class="active"
     />
-      <div class="Sets-gallery">
+      <div class="Weapon-type-gallery">
         <div class="path">
-          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'setsGallery'}">Set pieces</router-link>
+          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'weaponsGallery'}">Weapon pieces</router-link> >> <router-link :to="{ name: 'weaponsTypeGallery', params: { type: ($route.params.type)}}">{{weaponsTypeData[0]?.typeName}}</router-link>
         </div>
         <SortOptions 
           v-model:search="search" 
           v-model:typeSort="typeSort" 
           v-model:orderSort="orderSort"
         />
-        <span v-if="setsData[0]">
+        <span v-if="weaponsTypeData[0]">
             <div class="gallery">
                 <div class="item" v-for="(n,index) in resultsNB" :key="n">
-                    <AllSetSample 
-                    :key="setsOrganizedData[index].id"
-                    :name="setsOrganizedData[index].name"
-                    :id="setsOrganizedData[index].id"
-                    :img="(ListURL[setsOrganizedData[index].id-1] != '' ? ListURL[setsOrganizedData[index].id-1]:ListURL[-1])"
+                    <WeaponTypeSample
+                    :key="weaponTypeOrganizedData[index].id"
+                    :name="weaponTypeOrganizedData[index].name"
+                    :id="weaponTypeOrganizedData[index].id"
+                    :img="(weaponTypeOrganizedData[index].assets ?(weaponTypeOrganizedData[index].assets.image != null ? weaponTypeOrganizedData[index].assets.image : weaponTypeOrganizedData[-1]) : weaponTypeOrganizedData[-1])"
+                    :icon="(weaponTypeOrganizedData[index].assets ?(weaponTypeOrganizedData[index].assets.icon != null ? weaponTypeOrganizedData[index].assets.icon : weaponTypeOrganizedData[-1]) : weaponTypeOrganizedData[-1])"
                     />
                 </div>
             </div>
-            <div v-if="setsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
+            <div v-if="weaponTypeOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
               <p>Load more...</p>
             </div>
-            <div v-if="!setsOrganizedData[0]">
+            <div v-if="!weaponTypeOrganizedData[0]">
                 Nothing found for {{search}}
             </div>
         </span>
@@ -37,22 +38,22 @@
   </template>
     
   <script>
+    import { useRoute } from 'vue-router'
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
     import LoadingCard from '@/components/BasicSample/Loading.vue'
-    import AllSetSample from '@/components/AllSample/AllSetSample.vue'
+    import WeaponTypeSample from '@/components/TypeSample/WeaponTypeSample.vue'
     import SortOptions from '@/components/BasicSample/SortOptions.vue'
-    import { setURL } from'@/services/tools.js'
-    import { getAllArmorSetsData } from '@/services/api/AllElementsRepository.js'
+    import { getWeaponByType } from '@/services/api/GetElementByType.js'
     
     export default {
-      name: 'SetsGallery',
+      name: 'WeaponTypeGallery',
       computed: {
         resultsNB: function() {
-          return (this.resultsNBasked > this.setsOrganizedData.length ? this.setsOrganizedData.length : this.resultsNBasked);
+          return (this.resultsNBasked > this.weaponTypeOrganizedData.length ? this.weaponTypeOrganizedData.length : this.resultsNBasked);
         },
-        setsOrganizedData: function() {
-            let data = this.setsData;
+        weaponTypeOrganizedData: function() {
+            let data = this.weaponsTypeData;
             let field;
             if (this.typeSort == "Name")
               {field = "name";}
@@ -72,26 +73,36 @@
           HeaderCard,
           FooterCard,
           LoadingCard,
-          AllSetSample,
+          WeaponTypeSample,
           SortOptions
       },
       data() {
         return {
           active: "object",
-          setsData: [],
+          weaponsTypeData: [],
           search: localStorage.getItem("search") || "",
           typeSort: localStorage.getItem("typeSort") || "ID",
           orderSort: localStorage.getItem("orderSort") || "A-Z",
-          resultsNBasked: 12,
-          ListURL: setURL
+          resultsNBasked: 12
         }
       },
       beforeMount() {
-        this.retrieveSetsData()
+        const route = useRoute();
+        this.activeSearch = route.params.type;
+        this.retrieveWeaponTypeData(route.params.type);
+      },
+      beforeRouteUpdate(to, from) {
+        if (to.params.name != from.params.name)
+        {
+            this.resultsNBasked = 25;
+            this.weaponsTypeData = [];
+            this.activeSearch = to.params.name;
+            this.retrieveWeaponTypeData(to.params.name);
+        }
       },
       methods: {
-        async retrieveSetsData() {
-          this.setsData = await getAllArmorSetsData()
+        async retrieveWeaponTypeData(type) {
+          this.weaponsTypeData = await getWeaponByType(type)
         },
         LoadMore() {
           this.resultsNBasked += 12;

@@ -5,13 +5,13 @@
     <div class="Main-article">
         <h1>Welcome to the MONSTER HUNTER WORLD guide</h1>
 
-        <img class="barre" src="@/assets/barre.png"/>
+        <img class="barre" rel="preload" src="@/assets/barre.png"/>
 
         <div class ="trailer">
             <iframe src="https://www.youtube.com/embed/OotQrKEqe94" title="YouTube video player" allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
 
-        <img class="barre rotate180" src="@/assets/barre.png"/>
+        <img class="barre rotate180" rel="preload" src="@/assets/barre.png"/>
 
         <div class="container">
 
@@ -50,8 +50,8 @@
 </template>
     
 <script>
-    import HeaderCard from '@/components/Header.vue'
-    import FooterCard from '@/components/Footer.vue'
+    import HeaderCard from '@/components/BasicSample/Header.vue'
+    import FooterCard from '@/components/BasicSample/Footer.vue'
     import OfTheDayCard from '@/components/OfTheDayCard.vue'
   
     import { getRandMonster, getRandLocation, getRandWeapon, getRandArmorSet, getRandItem } from '@/services/api/GetElementById.js'

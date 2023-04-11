@@ -28,18 +28,18 @@
           </div>
         </div>
         <div v-else class="wait-for-gallery">
-                  <img rel="preload" class="picture" src="@/assets/loading.gif"/>
-          <h2>Loading...</h2>
+            <LoadingCard/>
         </div>
       </div>
     <FooterCard/>
   </template>
     
   <script>
-    import HeaderCard from '@/components/Header.vue'
-    import FooterCard from '@/components/Footer.vue'
-    import AllSkillSample from '@/components/AllSkillSample.vue'
-    import SortOptions from '@/components/SortOptions.vue'
+    import HeaderCard from '@/components/BasicSample/Header.vue'
+    import FooterCard from '@/components/BasicSample/Footer.vue'
+    import LoadingCard from '@/components/BasicSample/Loading.vue'
+    import AllSkillSample from '@/components/AllSample/AllSkillSample.vue'
+    import SortOptions from '@/components/BasicSample/SortOptions.vue'
   
     import { getAllSkillsData } from '@/services/api/AllElementsRepository.js'
     
@@ -69,6 +69,7 @@
       components: {
           HeaderCard,
           FooterCard,
+          LoadingCard,
           AllSkillSample,
           SortOptions
       },
@@ -114,29 +115,6 @@
   </style>
     
   <style scoped>
-    .wait-for-gallery {
-      width: 100%;
-      position: relative;
-    }
-  
-    img.picture {
-      position: absolute;
-      padding: auto;
-      width: 50vw;
-      height: auto;
-      left: 50%;
-      transform: translate(-50%, 0); 
-    }
-  
-    .wait-for-gallery h2 {
-      position: absolute;
-      left: 50%;
-      transform: translate(-50%, 0); 
-      color: #f5e5be;
-      text-shadow: 2px 0 #694B44, -2px 0 #694B44, 0 2px #694B44, 0 -2px #694B44,
-              1px 1px #694B44, -1px -1px #694B44, 1px -1px #694B44, -1px 1px #694B44;
-    }
-  
     .path, .gallery {
         margin-left: 2vw;
         margin-bottom: 1vh;
