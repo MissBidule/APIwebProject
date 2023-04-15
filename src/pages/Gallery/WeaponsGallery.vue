@@ -2,33 +2,38 @@
     <HeaderCard
       :class="active"
     />
-      <div class="Locations-gallery">
+      <div class="Weapons-gallery">
         <div class="path">
-          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'lifeIndex'}">Life</router-link> >> <router-link :to="{ name: 'locationsGallery'}">Location</router-link>
+          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'weaponsGallery'}">Weapon pieces</router-link>
+        </div>
+        <div class="type-list">
+          <ul>
+            <li v-for="(n,index) in listType.length" :key="n">
+            <router-link :to="{ name: 'weaponsTypeGallery', params: { type: listType[index]}}">{{listName[index]}}</router-link>
+          </li>
+          </ul>
         </div>
         <SortOptions 
           v-model:search="search" 
           v-model:typeSort="typeSort" 
           v-model:orderSort="orderSort"
         />
-        <span v-if="locationsData[0]">
-            <div class="gallery">
-                <div class="item" v-for="(n,index) in resultsNB" :key="n">
-                    <AllLocationSample 
-                    :key="locationsOrganizedData[index].id"
-                    :name="locationsOrganizedData[index].name"
-                    :id="locationsOrganizedData[index].id"
-                    :img="(ListURL[locationsOrganizedData[index].id-1] != '' ? ListURL[locationsOrganizedData[index].id-1]:ListURL[-1])"
-                    />
-                </div>
-            </div>
-            <div v-if="locationsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
+        <div v-if="weaponsData[0]" class="gallery">
+          <span v-for="(n,index) in resultsNB" :key="n">
+            <AllWeaponSample 
+              :key="weaponsOrganizedData[index].id"
+              :name="weaponsOrganizedData[index].name"
+              :type="weaponsOrganizedData[index].typeName"
+              :id="weaponsOrganizedData[index].id"
+            />
+          </span>
+          <div v-if="weaponsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
               <p>Load more...</p>
-            </div>
-            <div v-if="!locationsOrganizedData[0]">
-                Nothing found for {{search}}
-            </div>
-        </span>
+          </div>
+          <div v-if="!weaponsOrganizedData[0]">
+            Nothing found for {{search}}
+          </div>
+        </div>
         <div v-else class="wait-for-gallery">
             <LoadingCard/>
         </div>
@@ -40,19 +45,20 @@
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
     import LoadingCard from '@/components/BasicSample/Loading.vue'
-    import AllLocationSample from '@/components/AllSample/AllLocationSample.vue'
+    import AllWeaponSample from '@/components/AllSample/AllWeaponSample.vue'
     import SortOptions from '@/components/BasicSample/SortOptions.vue'
-    import { locationURL } from'@/services/tools.js'
-    import { getAllLocationsData } from '@/services/api/AllElementsRepository.js'
+    import { weaponType, weaponName } from '@/services/tools'
+  
+    import { getAllWeaponsData } from '@/services/api/AllElementsRepository.js'
     
     export default {
-      name: 'LocationsGallery',
+      name: 'WeaponsGallery',
       computed: {
         resultsNB: function() {
-          return (this.resultsNBasked > this.locationsOrganizedData.length ? this.locationsOrganizedData.length : this.resultsNBasked);
+          return (this.resultsNBasked > this.weaponsOrganizedData.length ? this.weaponsOrganizedData.length : this.resultsNBasked);
         },
-        locationsOrganizedData: function() {
-            let data = this.locationsData;
+        weaponsOrganizedData: function() {
+            let data = this.weaponsData;
             let field;
             if (this.typeSort == "Name")
               {field = "name";}
@@ -72,53 +78,54 @@
           HeaderCard,
           FooterCard,
           LoadingCard,
-          AllLocationSample,
+          AllWeaponSample,
           SortOptions
       },
       data() {
         return {
-          active: "life",
-          locationsData: [],
-          search: localStorage.getItem("search") || "",
-          typeSort: localStorage.getItem("typeSort") || "ID",
-          orderSort: localStorage.getItem("orderSort") || "A-Z",
-          resultsNBasked: 12,
-          ListURL: locationURL
+            active: "object",
+            weaponsData: [],
+            search: localStorage.getItem("search") || "",
+            typeSort: localStorage.getItem("typeSort") || "ID",
+            orderSort: localStorage.getItem("orderSort") || "A-Z",
+            resultsNBasked: 25,
+            listType: weaponType,
+            listName: weaponName
         }
       },
       beforeMount() {
-        this.retrieveLocationsData()
+        this.retrieveWeaponsData()
       },
       methods: {
-        async retrieveLocationsData() {
-          this.locationsData = await getAllLocationsData()
+        async retrieveWeaponsData() {
+          this.weaponsData = await getAllWeaponsData()
         },
         LoadMore() {
-          this.resultsNBasked += 12;
+          this.resultsNBasked += 25;
         },
         initResultsNB() {
-          this.resultsNBasked = 12;
+          this.resultsNBasked = 25;
         }
       }
     }
   </script>
   
   <style>
-    .life #life {
+    .object #object {
         background-color: #896954;
     }
   
-    .life #life a {
+    .object #object a {
         background-color: #ddc89e;
     }
   
-    .life #life a:hover {
+    .object #object a:hover {
         background-color: #f5e5be;
     }
   </style>
     
   <style scoped>
-    .path, .navigation {
+    .path, .gallery {
         margin-left: 2vw;
         margin-bottom: 1vh;
     }
@@ -135,11 +142,11 @@
   
     .type-list ul li{
       display: inline-block;
-      background-image: url('.././assets/point.png');
+      background-image: url('@/assets/point.png');
       background-position: 0px 50%;
-      background-size: 50%;
+      background-size: 2em;
       background-repeat: no-repeat;
-      padding-left: 4%;
+      padding-left: 2em;
       padding-top: 2%;
       padding-bottom: 2%;
       margin-right: 2%;
@@ -156,24 +163,10 @@
     .navigation p:hover {
         background-color: #ddc89e;
     }
-
-    .gallery {
-        display: flex;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
-    }
-
-    .item {
-        width: 15em;
-    }
   
     @media screen and (max-width: 650px) {
-        .type-list ul li{
-            padding-left: 8%;
-        }
-
-        .item {
-            width: 10em;
-        }
+      .type-list ul li{
+        padding-left: 8%;
+      }
     }
   </style>

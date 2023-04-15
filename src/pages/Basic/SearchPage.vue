@@ -27,7 +27,7 @@
     import { useRoute } from 'vue-router'
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
-    import ResultSample from '@/components/ResultSample.vue'
+    import ResultSample from '@/components/BasicSample/ResultSample.vue'
     import { getAllElementsByName } from '@/services/api/GetElementByName.js'
     
     export default {

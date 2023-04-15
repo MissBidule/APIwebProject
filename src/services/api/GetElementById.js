@@ -1,4 +1,4 @@
-import { randOfTheDay, missingItem, missingArmorSet, missingWeapon, missingMonster } from '@/services/tools'
+import { weaponName, weaponType, randOfTheDay, missingItem, missingArmorSet, missingWeapon, missingMonster } from '@/services/tools'
 
 //1186 items missing 19 104 527 535 578 582 583 610 647 825 826 881 882 907 947 1060 1080 1081
 async function getItemById (id) {
@@ -86,6 +86,31 @@ async function getWeaponById (id) {
     .then((array) => {
         return array
     });
+
+    myAnswer.forEach(element => {
+        var index = weaponType.findIndex((item) => item == element.type);
+        element.typeName = weaponName[index];
+    });
+
+    return myAnswer;
+}
+
+async function getWeaponAllNamesById (id) {
+
+    var myAnswer = await getWeaponById(id);
+
+    if (myAnswer[0].crafting.previous != null)
+    {
+        var PreviousName = await getWeaponById(myAnswer[0].crafting.previous);
+        myAnswer[0].crafting.previousName = PreviousName[0].name;
+    }
+
+    myAnswer[0].crafting.branchesName = [];
+
+    for (var i = 0; i < myAnswer[0].crafting.branches.length; i++) {
+        var beanchesWeaponName = await getWeaponById(myAnswer[0].crafting.branches[i]);
+        myAnswer[0].crafting.branchesName.push(beanchesWeaponName[0].name);
+    }
 
     return myAnswer;
 }
@@ -180,8 +205,22 @@ async function getArmorById (id) {
     return myAnswer;
 }
 
+async function getArmorAndSetById (id) {
+
+    var myAnswer = await getArmorById(id);
+
+    myAnswer[0].armorSet.piecesName = [];
+
+    for (var i = 0; i < myAnswer[0].armorSet.pieces.length; i++) {
+        var ArmorName = await getArmorById(myAnswer[0].armorSet.pieces[i]);
+        myAnswer[0].armorSet.piecesName.push(ArmorName[0].name);
+    }
+
+    return myAnswer;
+}
+
 //Too many missing elements
-async function getCharmsById (id) {
+async function getCharmById (id) {
 
     var myHeaders = new Headers({
         "Content-Type": "application/json"
@@ -211,7 +250,7 @@ async function getCharmsById (id) {
 }
 
 //No missing elements
-async function getDecorationsById (id) {
+async function getDecorationById (id) {
 
     var myHeaders = new Headers({
         "Content-Type": "application/json"
@@ -241,7 +280,7 @@ async function getDecorationsById (id) {
 }
 
 //4 missing elements
-async function getSkillsById (id) {
+async function getSkillById (id) {
 
     var myHeaders = new Headers({
         "Content-Type": "application/json"
@@ -270,8 +309,8 @@ async function getSkillsById (id) {
     return myAnswer;
 }
 
-//No missing elements
-async function getAilmentsById(id) {
+//15 No missing elements
+async function getAilmentById(id) {
 
     var myHeaders = new Headers({
         "Content-Type": "application/json"
@@ -318,8 +357,8 @@ async function getRandItem () {
     });
 
     var requestOptions = {
-    method: 'GET',
-    headers: myHeaders
+        method: 'GET',
+        headers: myHeaders
     };
 
     var myRequest = new Request('https://mhw-db.com'+'/items?q={"id":'+id+'}', requestOptions)
@@ -466,7 +505,7 @@ async function getRandMonster () {
     var requestOptions = {
     method: 'GET',
     headers: myHeaders
-    };id
+    };
 
     var myRequest = new Request('https://mhw-db.com'+'/monsters?q={"id":'+id+'}', requestOptions)
 
@@ -492,5 +531,6 @@ export {
         getWeaponById, getRandWeapon, 
         getArmorSetById, getRandArmorSet, 
         getItemById, getRandItem,
-        getArmorById, getCharmsById, getDecorationsById, getSkillsById, getAilmentsById
+        getArmorById, getCharmById, getDecorationById, getSkillById, getAilmentById,
+        getArmorAndSetById, getWeaponAllNamesById
         }

@@ -66,8 +66,8 @@ var missingArmorSet = [158];
 var missingWeapon = [1025,1173,1186,1208,1262,1263,1280];
 var missingMonster = [46,47];
 var missingArmor = [656,657,658,659,660,666,979,1497,1510,1582,1583];
-var missingCharms = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233];
-var missingSkills = [156,159,160,161];
+var missingCharm = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233];
+var missingSkill = [156,159,160,161];
 
 //Type array
 
@@ -76,7 +76,39 @@ var armorType = ["head","chest","gloves","waist","legs"];
 var weaponType = ["great-sword","long-sword","sword-and-shield","dual-blades","hammer","hunting-horn","lance","gunlance","switch-axe","charge-blade","insect-glaive","light-bowgun","heavy-bowgun","bow"];
 var weaponName = ["Great sword","Long sword","Sword and shield","Dual blades","Hammer","Hunting horn","Lance","Gunlance","Switch axe","Charge blade","Insect glaive","Light bowgun","Heavy bowgun","Bow"];
 
-//Img URLs
+var elementName = ["fire","water","ice","thunder","dragon","blast","poison","sleep","paralysis","stun"]
+
+//Img URL
+
+var elementIcon = [
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-fire-damage.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-water-elemental-damage.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-ice-damage.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-thunder-damage.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-dragon-damage.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/Blastblight.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-poison-status-effect.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/sleep-mhw-status-effect.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/paralysis-icon.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/mhw-stun-status-effect.png"
+]
+
+var defaultWeaponURL = [
+    "https://assets.mhw-db.com/weapons/great-sword/9876ac2d364c5d15f019e24a8d2c08c4509015af.5e306edb643559c79313457ed6382333.png",
+    "https://assets.mhw-db.com/weapons/long-sword/9706a176b1b8dd071ef33376d1c885ccdf545c19.0da7f897eddee1a6a118fbcae6135679.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_sword_and_shield.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_dual_blade.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_hammer.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_hunting_horn.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_lance.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_gunlance.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_switch_axe.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_charge_blade.png",
+    "https://assets.mhw-db.com/weapons/insect-glaive/adeb5e7f179d604903c4b09cf9987f4ab010a632.119abd643a28cc9a87cbd2f74844248f.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_light_bowgun.png",
+    "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/placeholder_heavy_bowgun.png",
+    "https://assets.mhw-db.com/weapons/bow/20a9cfd9a6a80fa5666c7ab487c7422eff1d9092.05b8f5c24b77309f5fecbd97b9114c61.png"
+]
 
 var monsterIconURL = [
     "https://monsterhunterworld.wiki.fextralife.com/file/Monster-Hunter-World/gthumbnails/mhw-aptonoth_icon.png",
@@ -598,7 +630,8 @@ var setURL = [
 
 export  { 
         randOfTheDay, GetSortOrder, capitalizeFirstLetter,
-        missingItem, missingArmorSet, missingWeapon, missingMonster, missingArmor, missingCharms, missingSkills,
+        missingItem, missingArmorSet, missingWeapon, missingMonster, missingArmor, missingCharm, missingSkill,
         armorType, weaponType, weaponName,
-        setURL, locationURL, monsterImgURL, monsterIconURL
+        setURL, locationURL, monsterImgURL, monsterIconURL, defaultWeaponURL,
+        elementName, elementIcon
         }

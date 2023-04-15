@@ -1,8 +1,8 @@
 <template>
     <div class="monster-type-item">
-      <router-link :to="{ name: 'armorPage', params: { id: id }}">
-        <img alt="monster-picture" v-bind:src=img class="monster-img" />
-        <p><img alt="monster-icon" v-bind:src=icon />{{name}}</p>
+      <router-link :to="{ name: 'monsterPage', params: { id: id }}">
+        <img alt="monster-picture" rel="preload" v-bind:src=img class="monster-img" />
+        <p><img alt="monster-icon" rel="preload" v-bind:src=icon />{{name}}</p>
       </router-link>
     </div>
 </template>
@@ -22,13 +22,15 @@
 <style scoped>
     img.monster-img {
         height: auto;
-        width: 10em;
+        width: auto;
+        max-width: 10em;
         max-height: 10em;
     }
 
     .monster-type-item, .monster-type-item a {
         text-align: center;
         text-decoration: none;
+        flex-grow: 1;
     }
 
     .monster-type-item p {

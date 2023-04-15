@@ -2,41 +2,35 @@
     <HeaderCard
       :class="active"
     />
-      <div class="Monsters-gallery">
+      <div class="Locations-gallery">
         <div class="path">
-          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'lifeIndex'}">Life</router-link> >> <router-link :to="{ name: 'monstersGallery'}">Monster</router-link>
-        </div>
-        <div class="type-list">
-            <ul>
-                <li>
-                    <router-link :to="{ name: 'monstersTypeGallery', params: { type: 'small'}}">Small</router-link>
-                </li>
-                <li>
-                    <router-link :to="{ name: 'monstersTypeGallery', params: { type: 'large'}}">Large</router-link>
-                </li>
-            </ul>
+          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'lifeIndex'}">Life</router-link> >> <router-link :to="{ name: 'locationsGallery'}">Location</router-link>
         </div>
         <SortOptions 
           v-model:search="search" 
           v-model:typeSort="typeSort" 
           v-model:orderSort="orderSort"
         />
-        <div v-if="monstersData[0]" class="gallery">
-          <AllMonsterSample v-for="(n,index) in resultsNB" :key="n"
-            :name="monstersOrganizedData[index].name"
-            :id="monstersOrganizedData[index].id"
-            :img="(ListURL1[monstersOrganizedData[index].id-1] != '' ? ListURL1[monstersOrganizedData[index].id-1]:ListURL1[-1])"
-            :icon="(ListURL2[monstersOrganizedData[index].id-1] != '' ? ListURL2[monstersOrganizedData[index].id-1]:ListURL2[-1])"
-          />
-          <div v-if="monstersOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
+        <span v-if="locationsData[0]">
+            <div class="gallery">
+                <div class="item" v-for="(n,index) in resultsNB" :key="n">
+                    <AllLocationSample 
+                    :key="locationsOrganizedData[index].id"
+                    :name="locationsOrganizedData[index].name"
+                    :id="locationsOrganizedData[index].id"
+                    :img="(ListURL[locationsOrganizedData[index].id-1] != '' ? ListURL[locationsOrganizedData[index].id-1]:ListURL[-1])"
+                    />
+                </div>
+            </div>
+            <div v-if="locationsOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
               <p>Load more...</p>
-          </div>
-          <div v-if="!monstersOrganizedData[0]">
-            Nothing found for {{search}}
-          </div>
-        </div>
+            </div>
+            <div v-if="!locationsOrganizedData[0]">
+                Nothing found for {{search}}
+            </div>
+        </span>
         <div v-else class="wait-for-gallery">
-                  <LoadingCard/>
+            <LoadingCard/>
         </div>
       </div>
     <FooterCard/>
@@ -46,19 +40,19 @@
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
     import LoadingCard from '@/components/BasicSample/Loading.vue'
-    import AllMonsterSample from '@/components/AllSample/AllMonsterSample.vue'
+    import AllLocationSample from '@/components/AllSample/AllLocationSample.vue'
     import SortOptions from '@/components/BasicSample/SortOptions.vue'
-    import { monsterIconURL, monsterImgURL } from '@/services/tools'
-    import { getAllMonstersData } from '@/services/api/AllElementsRepository.js'
+    import { locationURL } from'@/services/tools.js'
+    import { getAllLocationsData } from '@/services/api/AllElementsRepository.js'
     
     export default {
-      name: 'MonstersGallery',
+      name: 'LocationsGallery',
       computed: {
         resultsNB: function() {
-          return (this.resultsNBasked > this.monstersOrganizedData.length ? this.monstersOrganizedData.length : this.resultsNBasked);
+          return (this.resultsNBasked > this.locationsOrganizedData.length ? this.locationsOrganizedData.length : this.resultsNBasked);
         },
-        monstersOrganizedData: function() {
-            let data = this.monstersData;
+        locationsOrganizedData: function() {
+            let data = this.locationsData;
             let field;
             if (this.typeSort == "Name")
               {field = "name";}
@@ -78,27 +72,26 @@
           HeaderCard,
           FooterCard,
           LoadingCard,
-          AllMonsterSample,
+          AllLocationSample,
           SortOptions
       },
       data() {
         return {
           active: "life",
-          monstersData: [],
+          locationsData: [],
           search: localStorage.getItem("search") || "",
           typeSort: localStorage.getItem("typeSort") || "ID",
           orderSort: localStorage.getItem("orderSort") || "A-Z",
           resultsNBasked: 12,
-          ListURL1 : monsterImgURL,
-          ListURL2 : monsterIconURL
+          ListURL: locationURL
         }
       },
       beforeMount() {
-        this.retrieveMonstersData()
+        this.retrieveLocationsData()
       },
       methods: {
-        async retrieveMonstersData() {
-          this.monstersData = await getAllMonstersData()
+        async retrieveLocationsData() {
+          this.locationsData = await getAllLocationsData()
         },
         LoadMore() {
           this.resultsNBasked += 12;
@@ -112,26 +105,26 @@
   
   <style>
     .life #life {
-      background-color: #896954;
+        background-color: #896954;
     }
   
     .life #life a {
-      background-color: #ddc89e;
+        background-color: #ddc89e;
     }
   
     .life #life a:hover {
-      background-color: #f5e5be;
+        background-color: #f5e5be;
     }
   </style>
     
   <style scoped>
-    .path, .gallery {
-      margin-left: 2vw;
-      margin-bottom: 1vh;
+    .path, .navigation {
+        margin-left: 2vw;
+        margin-bottom: 1vh;
     }
   
     a {
-      text-decoration: none;
+        text-decoration: none;
     }
   
     .type-list ul {
@@ -142,11 +135,11 @@
   
     .type-list ul li{
       display: inline-block;
-      background-image: url('.././assets/point.png');
+      background-image: url('@/assets/point.png');
       background-position: 0px 50%;
       background-size: 50%;
       background-repeat: no-repeat;
-      padding-left: 2em;
+      padding-left: 4%;
       padding-top: 2%;
       padding-bottom: 2%;
       margin-right: 2%;
@@ -159,24 +152,27 @@
       width: 20vw;
       padding-left: 0.5em;
     }
-  
+
     .navigation p:hover {
-      background-color: #ddc89e;
+        background-color: #ddc89e;
     }
 
     .gallery {
         display: flex;
         justify-content: space-evenly;
         flex-wrap: wrap;
-        align-items: flex-end;
+    }
+
+    .item {
+        width: 15em;
     }
   
     @media screen and (max-width: 650px) {
-      .type-list ul li{
-        padding-left: 8%;
-      }
+        .type-list ul li{
+            padding-left: 8%;
+        }
 
-      .item {
+        .item {
             width: 10em;
         }
     }

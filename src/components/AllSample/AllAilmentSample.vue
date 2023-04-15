@@ -1,6 +1,6 @@
 <template>
-    <div class="skill-card">
-        <router-link :to="{ name: 'skillPage', params: { id: id }}">{{name}}</router-link>
+    <div class="ailment-card">
+        <router-link :to="{ name: 'ailmentPage', params: { id: id }}">{{name}}</router-link>
     </div>
   </template>
   

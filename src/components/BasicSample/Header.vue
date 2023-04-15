@@ -205,6 +205,12 @@ export default {
         display: block;
     }
 
+    .hl{
+      height:auto;
+      background-color:#694B44;
+      padding:0;
+    }
+
     @media screen and (max-width: 970px) {
         body {
             width: 100vw;

@@ -43,7 +43,7 @@
   
 <style scoped>
     h3 {
-      background-image: url('.././assets/point.png');
+      background-image: url('@/assets/point.png');
       background-position: 0px 50%;
       width: 100%;
       background-size: 1em;

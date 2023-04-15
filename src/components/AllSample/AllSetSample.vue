@@ -1,7 +1,7 @@
 <template>
   <div class="set-item">
     <router-link :to="{ name: 'setPage', params: { id: id }}">
-      <img alt="Armor-set-picture" v-bind:src=img />
+      <img alt="Armor-set-picture" rel="preload" v-bind:src=img />
       <p>{{name}}</p>
     </router-link>
   </div>

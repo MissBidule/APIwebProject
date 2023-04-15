@@ -101,6 +101,8 @@
       methods: {
         async retrieveMonstersData(type) {
           this.monstersData = await getMonsterByType(type)
+          if (!this.monstersData || this.monstersData.length == 0)
+            this.$router.push({ name: 'error'});
         },
         LoadMore() {
           this.resultsNBasked += 12;
@@ -147,7 +149,7 @@
   
     .type-list ul li{
       display: inline-block;
-      background-image: url('.././assets/point.png');
+      background-image: url('@/assets/point.png');
       background-position: 0px 50%;
       background-size: 50%;
       background-repeat: no-repeat;

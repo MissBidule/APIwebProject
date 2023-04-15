@@ -2,31 +2,31 @@
     <HeaderCard
       :class="active"
     />
-      <div class="Weapon-type-gallery">
+      <div class="Armor-type-gallery">
         <div class="path">
-          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'weaponsGallery'}">Weapon pieces</router-link> >> <router-link :to="{ name: 'weaponsTypeGallery', params: { type: ($route.params.type)}}">{{weaponsTypeData[0]?.typeName}}</router-link>
+          <router-link :to="{ name: 'home'}">Home</router-link> >> <router-link :to="{ name: 'objectIndex'}">Object</router-link> >> <router-link :to="{ name: 'armorsGallery'}">Armor pieces</router-link> >> <router-link :to="{ name: 'armorsTypeGallery', params: { type: ($route.params.type)}}">{{capitalizeFirstLetterMethod(($route.params.type))}}</router-link>
         </div>
         <SortOptions 
           v-model:search="search" 
           v-model:typeSort="typeSort" 
           v-model:orderSort="orderSort"
         />
-        <span v-if="weaponsTypeData[0]">
+        <span v-if="armorsTypeData[0]">
             <div class="gallery">
                 <div class="item" v-for="(n,index) in resultsNB" :key="n">
-                    <WeaponTypeSample
-                    :key="weaponTypeOrganizedData[index].id"
-                    :name="weaponTypeOrganizedData[index].name"
-                    :id="weaponTypeOrganizedData[index].id"
-                    :img="(weaponTypeOrganizedData[index].assets ?(weaponTypeOrganizedData[index].assets.image != null ? weaponTypeOrganizedData[index].assets.image : weaponTypeOrganizedData[-1]) : weaponTypeOrganizedData[-1])"
-                    :icon="(weaponTypeOrganizedData[index].assets ?(weaponTypeOrganizedData[index].assets.icon != null ? weaponTypeOrganizedData[index].assets.icon : weaponTypeOrganizedData[-1]) : weaponTypeOrganizedData[-1])"
+                    <ArmorTypeSample
+                    :key="armorTypeOrganizedData[index].id"
+                    :name="armorTypeOrganizedData[index].name"
+                    :id="armorTypeOrganizedData[index].id"
+                    :img1="(armorTypeOrganizedData[index].assets ?(armorTypeOrganizedData[index].assets.imageMale != null ? armorTypeOrganizedData[index].assets.imageMale : imgM) : imgM)"
+                    :img2="(armorTypeOrganizedData[index].assets ? (armorTypeOrganizedData[index].assets.imageFemale != null ? armorTypeOrganizedData[index].assets.imageFemale : imgF) : imgF)"
                     />
                 </div>
             </div>
-            <div v-if="weaponTypeOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
+            <div v-if="armorTypeOrganizedData.length > resultsNBasked" @click="LoadMore" class="navigation">
               <p>Load more...</p>
             </div>
-            <div v-if="!weaponTypeOrganizedData[0]">
+            <div v-if="!armorTypeOrganizedData[0]">
                 Nothing found for {{search}}
             </div>
         </span>
@@ -42,18 +42,30 @@
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
     import LoadingCard from '@/components/BasicSample/Loading.vue'
-    import WeaponTypeSample from '@/components/TypeSample/WeaponTypeSample.vue'
+    import ArmorTypeSample from '@/components/TypeSample/ArmorTypeSample.vue'
     import SortOptions from '@/components/BasicSample/SortOptions.vue'
-    import { getWeaponByType } from '@/services/api/GetElementByType.js'
+    import { capitalizeFirstLetter } from '@/services/tools'
+    import { getArmorByType } from '@/services/api/GetElementByType.js'
     
+    import imageMhead from "@/assets/placeholder_headgear_male.png"
+    import imageFhead from "@/assets/placeholder_headgear_female.png"
+    import imageMchest from "@/assets/placeholder_armor_male.png"
+    import imageFchest from "@/assets/placeholder_armor_female.png"
+    import imageMgloves from "@/assets/placeholder_gloves_male.png"
+    import imageFgloves from "@/assets/placeholder_gloves_female.png"
+    import imageMwaist from "@/assets/placeholder_faulds_male.png"
+    import imageFwaist from "@/assets/placeholder_faulds_female.png"
+    import imageMlegs from "@/assets/placeholder_leggings_male.png"
+    import imageFlegs from "@/assets/placeholder_leggings_female.png"
+
     export default {
-      name: 'WeaponTypeGallery',
+      name: 'ArmorTypeGallery',
       computed: {
         resultsNB: function() {
-          return (this.resultsNBasked > this.weaponTypeOrganizedData.length ? this.weaponTypeOrganizedData.length : this.resultsNBasked);
+          return (this.resultsNBasked > this.armorTypeOrganizedData.length ? this.armorTypeOrganizedData.length : this.resultsNBasked);
         },
-        weaponTypeOrganizedData: function() {
-            let data = this.weaponsTypeData;
+        armorTypeOrganizedData: function() {
+            let data = this.armorsTypeData;
             let field;
             if (this.typeSort == "Name")
               {field = "name";}
@@ -73,42 +85,69 @@
           HeaderCard,
           FooterCard,
           LoadingCard,
-          WeaponTypeSample,
+          ArmorTypeSample,
           SortOptions
       },
       data() {
         return {
           active: "object",
-          weaponsTypeData: [],
+          armorsTypeData: [],
           search: localStorage.getItem("search") || "",
           typeSort: localStorage.getItem("typeSort") || "ID",
           orderSort: localStorage.getItem("orderSort") || "A-Z",
-          resultsNBasked: 12
+          resultsNBasked: 12,
+          imgM: "",
+          imgF: ""
         }
       },
       beforeMount() {
         const route = useRoute();
         this.activeSearch = route.params.type;
-        this.retrieveWeaponTypeData(route.params.type);
+        this.retrieveArmorTypeData(route.params.type);
       },
       beforeRouteUpdate(to, from) {
         if (to.params.name != from.params.name)
         {
             this.resultsNBasked = 25;
-            this.weaponsTypeData = [];
+            this.armorsTypeData = [];
             this.activeSearch = to.params.name;
-            this.retrieveWeaponTypeData(to.params.name);
+            this.retrieveArmorTypeData(to.params.name);
         }
       },
       methods: {
-        async retrieveWeaponTypeData(type) {
-          this.weaponsTypeData = await getWeaponByType(type)
+        async retrieveArmorTypeData(type) {
+          this.armorsTypeData = await getArmorByType(type)
+          if (!this.armorsTypeData || this.armorsTypeData.length == 0)
+            this.$router.push({ name: 'error'});
+          if (type=="head") {
+            this.imgM = imageMhead;
+            this.imgF = imageFhead;
+          }
+          if (type=="chest") {
+            this.imgM = imageMchest;
+            this.imgF = imageFchest;
+          }
+          if (type=="gloves") {
+            this.imgM = imageMgloves;
+            this.imgF = imageFgloves;
+          }
+          if (type=="waist") {
+            this.imgM = imageMwaist;
+            this.imgF = imageFwaist;
+          }
+          if (type=="legs") {
+            this.imgM = imageMlegs;
+            this.imgF = imageFlegs;
+          }
         },
         LoadMore() {
           this.resultsNBasked += 12;
         },
         initResultsNB() {
           this.resultsNBasked = 12;
+        },
+        capitalizeFirstLetterMethod(string) {
+          return capitalizeFirstLetter(string)
         }
       }
     }
@@ -146,7 +185,7 @@
   
     .type-list ul li{
       display: inline-block;
-      background-image: url('.././assets/point.png');
+      background-image: url('@/assets/point.png');
       background-position: 0px 50%;
       background-size: 50%;
       background-repeat: no-repeat;

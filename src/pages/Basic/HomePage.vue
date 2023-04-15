@@ -52,7 +52,7 @@
 <script>
     import HeaderCard from '@/components/BasicSample/Header.vue'
     import FooterCard from '@/components/BasicSample/Footer.vue'
-    import OfTheDayCard from '@/components/OfTheDayCard.vue'
+    import OfTheDayCard from '@/components/BasicSample/OfTheDayCard.vue'
   
     import { getRandMonster, getRandLocation, getRandWeapon, getRandArmorSet, getRandItem } from '@/services/api/GetElementById.js'
     
@@ -149,17 +149,9 @@
       width: 25vw;
     }
 
-    .hl{
-      min-width:2px;
-      height:auto;
-      background-color:#694B44;
-      margin:30px;
-      padding:0;
-    }
-
     .listOf li {
       float: none;
-      background-image: url('.././assets/rond.png');
+      background-image: url('@/assets/rond.png');
       background-position: 0 50%;
       background-repeat: no-repeat;
       background-size: 1em;
@@ -179,6 +171,11 @@
       margin-top: 5%;
       margin-bottom: 5%;
       margin-right: 10%;
+    }
+
+    .hl {
+      margin:30px;
+      min-width:2px;
     }
 
     .container {

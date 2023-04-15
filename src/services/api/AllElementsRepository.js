@@ -117,8 +117,6 @@ async function getAllWeaponsData() {
         element.typeName = weaponName[index];
     });
 
-    console.log(myAnswer);
-
     return myAnswer;
 }
 
